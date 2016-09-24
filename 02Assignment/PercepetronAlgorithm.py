@@ -22,8 +22,11 @@ import random
 def get_weight(W, index):
     if index in W.keys():
         return W[index]
-    else: 
-        return random.random()
+    else:
+        if(random.random() < 0.5):
+            return random.random() * (-1)
+        else:
+            return random.random()
 
 #
 # Get the dot product of the two Dicts that represent Vectors.   
@@ -140,7 +143,7 @@ def perceptron_alg(X,y,W,b,r,count):
 if(len(sys.argv) != 3):
     print("Not enough arguments")
 csvlocation = sys.argv[1]
-r = int(sys.argv[2])
+r = float(sys.argv[2])
 
 
 with open(csvlocation) as csvfile:
@@ -168,5 +171,8 @@ with open(csvlocation) as csvfile:
     print('b: ' + str(W_b['b']))
     print('Total Rows: ' + str(len(y_vals)))
     print('updates: ' + str(W_b['count']))
+    
+    def one():
+        return 1;
         
         
