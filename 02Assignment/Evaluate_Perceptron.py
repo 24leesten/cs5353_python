@@ -61,8 +61,8 @@ def evaluate_perceptron(file, W, b):
         else:
             right = right + 1
             
-    accuracy = float(right/(right + wrong))
-    error = float(wrong/(right + wrong))
+    accuracy = float(float(right)/(float(right) + float(wrong)))
+    error = float(float(wrong)/(float(right) + float(wrong)))
     return {'right':right, 'wrong':wrong, 'accuracy':accuracy, 'error':error}
 
 def print_ep(E_P):
