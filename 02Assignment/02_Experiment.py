@@ -38,7 +38,7 @@ for r in r_vals:
         print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
         print('Std Deviation:\t\t' + str(numpy.std(vals)))
     print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Runs:\t\t' + str(ep['wrong']+ep['right']))
+    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
     print('Accuracy:\t\t' + str(ep['accuracy']))
     vals = [0]*runs
     
@@ -55,7 +55,7 @@ for r in r_vals:
         print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
         print('Std Deviation:\t\t' + str(numpy.std(vals)))
     print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Runs:\t\t' + str(ep['wrong']+ep['right']))
+    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
     print('Accuracy:\t\t' + str(ep['accuracy']))
     vals = [0]*runs
 
@@ -82,7 +82,7 @@ for mu in mu_vals:
         print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
         print('Std Deviation:\t\t' + str(numpy.std(vals)))
     print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Runs:\t\t' + str(ep['wrong']+ep['right']))
+    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
     print('Accuracy:\t\t' + str(ep['accuracy']))
     vals = [0]*runs
     
@@ -99,7 +99,7 @@ for mu in mu_vals:
         print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
         print('Std Deviation:\t\t' + str(numpy.std(vals)))
     print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Runs:\t\t' + str(ep['wrong']+ep['right']))
+    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
     print('Accuracy:\t\t' + str(ep['accuracy']))
     vals = [0]*runs
     
