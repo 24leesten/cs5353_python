@@ -3,10 +3,15 @@ Created on Sep 23, 2016
 
 @author: Leland Stenquist
 '''
-import sys
 import csv
 import ast
 import random
+
+def rand():
+    if(random.random() < 0.5):
+        return random.random() * 10  * (-1)
+    else:
+        return random.random() * 10
 
 #
 # Get the weight at the given index. If the index 
@@ -23,10 +28,7 @@ def get_weight(W, index):
     if index in W.keys():
         return W[index]
     else:
-        if(random.random() < 0.5):
-            return random.random() * (-1)
-        else:
-            return random.random()
+        return rand()
 
 #
 # Get the dot product of the two Dicts that represent Vectors.   
@@ -140,39 +142,49 @@ def perceptron_alg(X,y,W,b,r,count):
 #
 # MAIN
 #
-if(len(sys.argv) != 3):
-    print("Not enough arguments")
-csvlocation = sys.argv[1]
-r = float(sys.argv[2])
-
-
-with open(csvlocation) as csvfile:
-    # Read in the CSV
-    reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+# EX: run_perceptron('res/a5a.train' 0.5)
+def run_perceptron(file, r, epochs = 1):
     
     # create the variables that will be used
     training_data = []
     y_vals = []
-    W_b = {'W':{},'b':random.random(),'count':0}
+    W_b = {'W':{},'b':rand(),'count':0}
     
-    # fill in variables with CSV data
-    for row in reader:
-        y_vals.append(int(row.pop(0)))
-        dict_str = '{'
-        for val in row:
-            dict_str = dict_str + val + ','
-        dict_str = dict_str[:-1] + '}'
-        training_data.append(ast.literal_eval(dict_str))
-    
-    # Loop through all the rows
-    for row in range(0,len(y_vals)):
-        W_b = perceptron_alg(training_data[row],y_vals[row],W_b['W'],W_b['b'],r,W_b['count'])
-    print('W: ' + str(W_b['W']))
-    print('b: ' + str(W_b['b']))
-    print('Total Rows: ' + str(len(y_vals)))
-    print('updates: ' + str(W_b['count']))
-    
-    def one():
-        return 1;
+    with open(file) as csvfile:
+        # Read in the CSV
+        reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         
+        # fill in variables with CSV data
+        for row in reader:
+            y_vals.append(int(row.pop(0)))
+            dict_str = '{'
+            for val in row:
+                dict_str = dict_str + val + ','
+            dict_str = dict_str[:-1] + '}'
+            training_data.append(ast.literal_eval(dict_str))
+    
+    count = 0
+    range_td = list(range(len(y_vals)))
+    while count < epochs:      
+        if (epochs > 1):
+            random.shuffle(range_td)
+            
+        # Loop through all the rows
+        for row in range_td:
+            W_b = perceptron_alg(training_data[row],y_vals[row],W_b['W'],W_b['b'],r,W_b['count'])
+        count = count + 1
+
+    W_b['tests'] = len(y_vals) * epochs
+    return(W_b)
+    
+#
+#
+#
+def print_wb(W_b):
+    print('PERCEPTRON ALFORITHM RESULTS')
+    print('Weights: ' + str(W_b['W']))
+    print('Bias: ' + str(W_b['b']))
+    print('Total Tests: ' + str(W_b['tests']))
+    print('updates: ' + str(W_b['count']))  
+    print('\n')
         

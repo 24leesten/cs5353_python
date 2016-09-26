@@ -135,31 +135,31 @@ def perceptron_alg(X,y,W,b,r,count):
 #
 # MAIN
 #
-with open('res/table2') as csvfile:
-    # Read in the CSV
-    reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-    
-    # create the variables that will be used
+def run_perceptron():  
+        # create the variables that will be used
     training_data = []
     y_vals = []
     W_b = {'W':{},'b':0,'count':0}
     r = 1
+
+    with open('res/table2') as csvfile:
+        # Read in the CSV
+        reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        
     
-    # fill in variables with CSV data
-    for row in reader:
-        y_vals.append(int(row.pop(0)))
-        dict_str = '{'
-        for val in row:
-            dict_str = dict_str + val + ','
-        dict_str = dict_str[:-1] + '}'
-        training_data.append(ast.literal_eval(dict_str))
+        
+        # fill in variables with CSV data
+        for row in reader:
+            y_vals.append(int(row.pop(0)))
+            dict_str = '{'
+            for val in row:
+                dict_str = dict_str + val + ','
+            dict_str = dict_str[:-1] + '}'
+            training_data.append(ast.literal_eval(dict_str))
     
     # Loop through all the rows
     for row in range(0,len(y_vals)):
         W_b = perceptron_alg(training_data[row],y_vals[row],W_b['W'],W_b['b'],r,W_b['count'])
-    print('W: ' + str(W_b['W']))
-    print('b: ' + str(W_b['b']))
-    print('Total Rows: ' + str(len(y_vals)))
-    print('updates: ' + str(W_b['count']))
-        
-        
+    W_b['length'] = len(y_vals)
+    return W_b
+                
