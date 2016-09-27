@@ -28,7 +28,8 @@ def get_weight(W, index):
     if index in W.keys():
         return W[index]
     else:
-        return rand()
+        W[index] = rand();
+        return W[index]
 
 #
 # Get the dot product of the two Dicts that represent Vectors.   

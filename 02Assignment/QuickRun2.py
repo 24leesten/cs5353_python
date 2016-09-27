@@ -15,11 +15,16 @@ print('=========================')
 print('\nNORMAL PERCEPTRON')
 print('_______________\n')
 
+mean_str = ''
+std_str = ''
+std_upd = ''
+std_acc = ''
+
 mean_std = True
 
 r = 1
 mu = 5
-runs = 1
+runs = 10
 print('TEST epoch values: 3, 5')
 if (mean_std):
     print('\tEach value is run ' + str(runs) + ' times. A mean and std dev for the accuracy is gathered.')
@@ -38,15 +43,24 @@ for epoch in epoch_vals:
         ep = evaluate_perceptron('res/a5a.train', W_b['W'], W_b['b'])
         vals[inx] = ep['accuracy']
     print('EVALUATE epoch =\t' + str(epoch))
-    if (mean_std):
-        print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
-        print('Std Deviation:\t\t' + str(numpy.std(vals)))
-    print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
-    print('Accuracy:\t\t' + str(ep['accuracy']))
+    
+    mean_str = mean_str + '& ' + '{0:.3f}'.format(numpy.mean(vals))
+    std_str = std_str + '& ' + '{0:.3f}'.format(numpy.std(vals))
+    std_upd = std_upd + '& ' + str(ep['wrong'])
+    std_acc = std_acc + '& ' + '{0:.3f}'.format(ep['accuracy'] * 100)
     vals = [0]*runs
+
+print('MEAN: ' + mean_str)
+print('STD: ' + std_str)
+print('UPDATE: ' + std_upd)
+print('ACC: ' + std_acc)
     
 print('\nAGAINST\n\t a5a.test\n')
+
+mean_str = ''
+std_str = ''
+std_upd = ''
+std_acc = ''
 
 for epoch in epoch_vals:
     
@@ -55,13 +69,17 @@ for epoch in epoch_vals:
         ep = evaluate_perceptron('res/a5a.test', W_b['W'], W_b['b'])
         vals[inx] = ep['accuracy']
     print('EVALUATE epoch =\t' + str(epoch))
-    if (mean_std):
-        print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
-        print('Std Deviation:\t\t' + str(numpy.std(vals)))
-    print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
-    print('Accuracy:\t\t' + str(ep['accuracy']))
+
+    mean_str = mean_str + '& ' + '{0:.3f}'.format(numpy.mean(vals))
+    std_str = std_str + '& ' + '{0:.3f}'.format(numpy.std(vals))
+    std_upd = std_upd + '& ' + str(ep['wrong'])
+    std_acc = std_acc + '& ' + '{0:.3f}'.format(ep['accuracy'] * 100)
     vals = [0]*runs
+
+print('MEAN: ' + mean_str)
+print('STD: ' + std_str)
+print('UPDATE: ' + std_upd)
+print('ACC: ' + std_acc)
 
 
 print('\nPERCEPTRON MARGIN')
@@ -70,6 +88,11 @@ print('TEST epoch values: 3, 5')
 
 print('\nAGAINST\n\t a5a.train\n')
 
+mean_str = ''
+std_str = ''
+std_upd = ''
+std_acc = ''
+
 for epoch in epoch_vals:
     
     for inx in rng:
@@ -77,15 +100,24 @@ for epoch in epoch_vals:
         ep = evaluate_perceptron('res/a5a.train', W_b['W'], W_b['b'])
         vals[inx] = ep['accuracy']
     print('EVALUATE epoch =\t' + str(epoch))
-    if (mean_std):
-        print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
-        print('Std Deviation:\t\t' + str(numpy.std(vals)))
-    print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
-    print('Accuracy:\t\t' + str(ep['accuracy']))
+
+    mean_str = mean_str + '& ' + '{0:.3f}'.format(numpy.mean(vals))
+    std_str = std_str + '& ' + '{0:.3f}'.format(numpy.std(vals))
+    std_upd = std_upd + '& ' + str(ep['wrong'])
+    std_acc = std_acc + '& ' + '{0:.3f}'.format(ep['accuracy'] * 100)
     vals = [0]*runs
+
+print('MEAN: ' + mean_str)
+print('STD: ' + std_str)
+print('UPDATE: ' + std_upd)
+print('ACC: ' + std_acc)
     
 print('\nAGAINST\n\t a5a.test\n')
+
+mean_str = ''
+std_str = ''
+std_upd = ''
+std_acc = ''
 
 for epoch in epoch_vals:
     
@@ -94,13 +126,17 @@ for epoch in epoch_vals:
         ep = evaluate_perceptron('res/a5a.test', W_b['W'], W_b['b'])
         vals[inx] = ep['accuracy']
     print('EVALUATE epoch =\t' + str(epoch))
-    if (mean_std):
-        print('Mean Accuracy:\t\t' + str(numpy.mean(vals)))
-        print('Std Deviation:\t\t' + str(numpy.std(vals)))
-    print('Updates:\t\t' + str(ep['wrong']))
-    print('Total Rows:\t\t' + str(ep['wrong']+ep['right']))
-    print('Accuracy:\t\t' + str(ep['accuracy']))
+
+    mean_str = mean_str + '& ' + '{0:.3f}'.format(numpy.mean(vals))
+    std_str = std_str + '& ' + '{0:.3f}'.format(numpy.std(vals))
+    std_upd = std_upd + '& ' + str(ep['wrong'])
+    std_acc = std_acc + '& ' + '{0:.3f}'.format(ep['accuracy'] * 100)
     vals = [0]*runs
+
+print('MEAN: ' + mean_str)
+print('STD: ' + std_str)
+print('UPDATE: ' + std_upd)
+print('ACC: ' + std_acc)
     
 print('\n=======================')
 print('= END - 03 EXPERIMENT =')
