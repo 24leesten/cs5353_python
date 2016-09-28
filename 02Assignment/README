@@ -3,7 +3,7 @@ Leland Stenquist
 u0634909
 
 NOTE: I created my drivers so that they can run the perceptron algorithm multiple times and get a mean and variance. Because this 
-drastically increases the run time I do not include this functionality in my run.sh.
+drastically increases the run time I do not include this functionality in my run.sh. All code was tested successfully on the cade machines.
 
 ABOUT: I created three python files that run my different experiments. These three files all can be run by using the run.sh script.
 Essentially they are three python scripts used to run each experiment. There names are:
