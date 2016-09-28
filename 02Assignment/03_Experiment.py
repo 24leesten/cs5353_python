@@ -15,7 +15,7 @@ print('=========================')
 print('\nNORMAL PERCEPTRON')
 print('_______________\n')
 
-mean_std = True
+mean_std = False
 
 r = 1
 mu = 5
