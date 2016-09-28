@@ -1,0 +1,47 @@
+02 Assignment
+Leland Stenquist
+u0634909
+
+ABOUT: I created three python files that run my different experiments. These three files all can be run by using the run.sh script.
+Essentially they are three python scripts used to run each experiment. There names are:
+
+ - 01_Experiment.py
+ - 02_Experiment.py
+ - 03_Experiment.py
+
+I also created three different version of the perceptron Algorithm. These are:
+
+ - PerceptronAlgorithmSanity
+    - runs the simple sanity check
+ - PerceptronAlgorithm
+    - runs the base perceptron algorithm
+ - PerceptronAlgorithmMargin
+    - runs the margin perceptron algorithm 
+
+Think of these as libraries of functions that can be used to call different versions of the perceptron algorithm. Here are examples 
+of how to call each algorithm:
+
+ - run_perceptron()                              // for the sanity check
+ - run_perceptron('res/a5a.train', r)            // for the perceptron
+ - run_perceptron_margin('res/a5a.train', r, mu) // for the margin perceptron
+
+Each of these functions returns an object that contains:
+ 
+ - W     // the wieghts
+ - b     // the bias
+ - count // number of updates
+ - tests // number of rows in the learning data
+
+These can be used by the Evaluate_Perceptron function to run against the test data. Here is and example of how to call this functions.
+
+ > W_b = run_perceptron('res/a5a.train', r, epoch)
+ > ep = evaluate_perceptron('res/a5a.train', W_b['W'], W_b['b'])
+
+The object create by the evaluate perceptron function contains:
+
+ - right     // the number of correct classifications
+ - wrong    // the number of wrong classifications
+ - accuracy // the accuracy
+ - erorr    // the error
+
+You will also see quick runs functions. These are just functions that return results in a way that easy to copy and paste into LaTex.
