@@ -120,7 +120,7 @@ def get_weight(W, index):
     if index in W.keys():
         return W[index]
     else:
-        W[index] = rand();
+        W[index] = 0;
         return W[index]
 
 
@@ -144,22 +144,22 @@ def svm_alg(X, y, W, b, count, gamma):
     W_b = {'W': W, 'b': b, 'count': count}
     if False:
         debug_svm(X, y, W, b, gamma)
-
     # SVM
     if y*(dot_product(W, X)+b) <= 1:
         count = count + 1
         # TODO: Do we update bias?
-        W_b = {'W': update_W(W, gamma, y, X), 'b': (b + (gamma * y)), 'count': count}
+        W_b = {'W':update_W(W, gamma, y, X), 'b':(b + gamma * y), 'count':count}
+        return W_b
     else:
-        W_b = {'W':matrix_mult_constant(W, 1 - gamma), 'b': (b + (gamma * y)), 'count': count}
-    return W_b
+        W_b = {'W':matrix_mult_constant(W, 1-gamma), 'b':(b + gamma * y), 'count':count}
+        return W_b
 
 
 # read in the training data
 #
 # MAIN
 #
-def run_svm(labels_file, data_file, c=1, gamma=0.01, bias=random.random(), epochs=1):
+def run_svm(labels_file, data_file, epochs=1, c=1, gamma=0.01, bias=0):
     global C
     C = c
 
@@ -193,13 +193,14 @@ def run_svm(labels_file, data_file, c=1, gamma=0.01, bias=random.random(), epoch
     count = 0
     range_td = list(range(len(y_vals)))
     while count < epochs:
-        if (epochs > 1):
-            random.shuffle(range_td)
+        random.shuffle(range_td)
 
+        row_count = 0
         # Loop through all the rows
         for row in range_td:
             W_b = svm_alg(training_data[row], y_vals[row], W_b['W'], W_b['b'], W_b['count'], gamma)
-            gamma = gamma/(1-gamma*(W_b['count']/c))
+            gamma = gamma/(1+gamma*(row_count/c))
+            row_count += 1
         count += 1
 
     W_b['tests'] = len(y_vals) * epochs

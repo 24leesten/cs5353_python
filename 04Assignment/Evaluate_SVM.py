@@ -55,8 +55,8 @@ def evaluate_svm(labels_file, data_file, W, b):
     error = float(float(wrong)/(float(right) + float(wrong)))
     return {'right':right, 'wrong':wrong, 'accuracy':accuracy, 'error':error}
 
-def print_ep(E_P):
-    print('PERCEPTRON EVALUATION')
+def print_svm(E_P):
+    print('SVM EVALUATION')
     print('Right:\t' + str(E_P['right']))
     print('Wrong:\t' + str(E_P['wrong']))
     print('Accuracy:\t' + str(E_P['accuracy']))
