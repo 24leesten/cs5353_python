@@ -2,7 +2,7 @@ import csv
 import ast
 import numpy
 import math
-
+import operator
 
 class Tree(object):
     def __init__(self):
@@ -36,6 +36,8 @@ def scan(labels_file, Attributes_file, numeric=None):
                 count = 0
                 dict_str = '{'
                 for val in row:
+                    if val == "":
+                        continue
                     attributes.append(count)
                     dict_str = dict_str + str(count) + ":" + val + ','
                     count += 1
@@ -47,6 +49,8 @@ def scan(labels_file, Attributes_file, numeric=None):
                 count = 0
                 dict_str = '{'
                 for val in row:
+                    if val == "":
+                        continue
                     attributes.append(count)
                     val = str(int(math.floor(float(val) / numeric)))
                     dict_str = dict_str + str(count) + ":" + val + ','
@@ -72,6 +76,7 @@ def get_label(labels):
 def id3(data_set, labels, attributes):
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
+        print("Leaf")
         t = Tree()
         t.leaf = True
         t.label = unique_lbl[0]
@@ -79,13 +84,14 @@ def id3(data_set, labels, attributes):
         t1 = Tree()
         entropy = 0
         probs = []
-        info_gain = []
+        info_gain = {}
         idx = 0
         # Get the main entropy
         for lbl in unique_lbl:
             probs.append(labels.count(lbl) / len(labels))
             entropy = entropy + (-probs[idx] * math.log2(probs[idx]))
             idx += 1
+        print("Got main entropy")
         # Get the entropy for each attribute
         for attribute in attributes:  # TODO : could be probelmatic
             # get the unique attribute
@@ -95,7 +101,7 @@ def id3(data_set, labels, attributes):
             for val in unique_vals:
                 pos = neg = 0
                 length = column.count(val)
-                entropy = 0
+                ent = 0
                 count = 0
                 for c in column:
                     if c == val:
@@ -105,13 +111,14 @@ def id3(data_set, labels, attributes):
                             neg += 1
                     count += 1
                 if (neg != 0 and pos != 0):
-                    entropy = (-(pos / length) * math.log2(pos / length)) * (-(neg / length) * math.log2(neg / length))
-                expected_entropy = expected_entropy + entropy * (length / len(column))
-            info_gain.append(entropy - expected_entropy)
+                    ent = (-(pos / length) * math.log2(pos / length)) * (-(neg / length) * math.log2(neg / length))
+                expected_entropy = expected_entropy + ent * (length / len(column))
+            info_gain[attribute]=(entropy - expected_entropy)
 
-        attribute = numpy.argmax(info_gain)
+        attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
         attributes.remove(attribute)
+        print("got attr")
 
         unique_vals = numpy.unique(get_column(data_set, attribute))
         for val in unique_vals:
@@ -124,12 +131,14 @@ def id3(data_set, labels, attributes):
                     new_labels.append(labels[count])
                 count += 1
             if len(new_data_set) == 0:
+                print("Leaf")
                 leaf = Tree
                 leaf.link = val
                 leaf.leaf = True
                 leaf.label = get_label(labels)
                 t1.children.append(leaf)
             else:
+                print("Call id3")
                 t = id3(new_data_set, new_labels, attributes)
                 t.link = val
                 t1.children.append(t)

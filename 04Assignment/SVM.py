@@ -174,6 +174,8 @@ def run_svm(labels_file, data_file, epochs=1, c=1, gamma=0.01, bias=0):
 
         # fill in y_vals with CSV data
         for row in labels_reader:
+            if row == "":
+                continue
             y_vals.append(int(row.pop(0)))
 
     with open(data_file) as csvfile:
@@ -182,6 +184,8 @@ def run_svm(labels_file, data_file, epochs=1, c=1, gamma=0.01, bias=0):
 
         # fill in training_data with CSV data
         for row in data_reader:
+            if row == "":
+                continue
             count = 0
             dict_str = '{'
             for val in row:
