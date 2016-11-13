@@ -14,9 +14,10 @@ class Tree(object):
 
 
 def scan(labels_file, Attributes_file, numeric=None):
-    data_set = [];
-    labels = [];
-    attributes = [];
+    data_set = []
+    labels = []
+    attributes = []
+    build = True
 
     with open(labels_file) as csvfile:
         # Read in the CSV
@@ -38,11 +39,13 @@ def scan(labels_file, Attributes_file, numeric=None):
                 for val in row:
                     if val == "":
                         continue
-                    attributes.append(count)
+                    if build:
+                        attributes.append(count)
                     dict_str = dict_str + str(count) + ":" + val + ','
                     count += 1
                 dict_str = dict_str[:-1] + '}'
                 data_set.append(ast.literal_eval(dict_str))
+                build = False
         else:
             # fill in training_data with CSV data
             for row in data_reader:
@@ -51,12 +54,14 @@ def scan(labels_file, Attributes_file, numeric=None):
                 for val in row:
                     if val == "":
                         continue
-                    attributes.append(count)
+                    if build:
+                        attributes.append(count)
                     val = str(int(math.floor(float(val) / numeric)))
                     dict_str = dict_str + str(count) + ":" + val + ','
                     count += 1
                 dict_str = dict_str[:-1] + '}'
                 data_set.append(ast.literal_eval(dict_str))
+                build = False
 
     return {'d': data_set, 'l': labels, 'a': attributes}
 
@@ -76,7 +81,6 @@ def get_label(labels):
 def id3(data_set, labels, attributes):
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
-        print("Leaf")
         t = Tree()
         t.leaf = True
         t.label = unique_lbl[0]
@@ -91,34 +95,34 @@ def id3(data_set, labels, attributes):
             probs.append(labels.count(lbl) / len(labels))
             entropy = entropy + (-probs[idx] * math.log2(probs[idx]))
             idx += 1
-        print("Got main entropy")
         # Get the entropy for each attribute
         for attribute in attributes:  # TODO : could be probelmatic
             # get the unique attribute
             column = get_column(data_set, attribute)
-            unique_vals = numpy.unique(column)
+            val_dict = {}
             expected_entropy = 0
-            for val in unique_vals:
-                pos = neg = 0
-                length = column.count(val)
-                ent = 0
-                count = 0
-                for c in column:
-                    if c == val:
-                        if (labels[count] == 1):
-                            pos += 1
-                        else:
-                            neg += 1
-                    count += 1
-                if (neg != 0 and pos != 0):
+            ent = 0
+            count = 0
+            for c in column:
+                if not c in val_dict.keys():
+                    val_dict[c] = {'p':0,'n':0}
+                if (labels[count] == 1):
+                    val_dict[c]['p']+=1
+                else:
+                    val_dict[c]['n'] += 1
+                count += 1
+            for row in val_dict:
+                pos = val_dict[row]['p']
+                neg = val_dict[row]['n']
+                length = pos + neg
+                if (pos != 0 and neg != 0):
                     ent = (-(pos / length) * math.log2(pos / length)) * (-(neg / length) * math.log2(neg / length))
-                expected_entropy = expected_entropy + ent * (length / len(column))
+                expected_entropy += ent * (length / len(column))
             info_gain[attribute]=(entropy - expected_entropy)
 
         attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
         attributes.remove(attribute)
-        print("got attr")
 
         unique_vals = numpy.unique(get_column(data_set, attribute))
         for val in unique_vals:
@@ -131,14 +135,12 @@ def id3(data_set, labels, attributes):
                     new_labels.append(labels[count])
                 count += 1
             if len(new_data_set) == 0:
-                print("Leaf")
                 leaf = Tree
                 leaf.link = val
                 leaf.leaf = True
                 leaf.label = get_label(labels)
                 t1.children.append(leaf)
             else:
-                print("Call id3")
                 t = id3(new_data_set, new_labels, attributes)
                 t.link = val
                 t1.children.append(t)
