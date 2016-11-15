@@ -126,7 +126,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
                 neg = val_dict[row]['n']
                 length = pos + neg
                 if (pos != 0 and neg != 0):
-                    ent = (-(pos / length) * math.log(2,(pos / length)) * (-(neg / length) * math.log(2,neg / length)))
+                    ent = (-(pos / length) * math.log(2,(pos / float(length))) * (-(neg / length) * math.log(2,neg / float(length))))
                 expected_entropy += ent * (length / len(column))
             info_gain[attribute]=(entropy - expected_entropy)
 
