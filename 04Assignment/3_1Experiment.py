@@ -69,7 +69,7 @@ if two:
     for c in C:
         for g in gamma:
             print("== TESTING -> C: " + str(c) + " | Gamma: " + str(g) + " ==")
-            print()
+            print("")
             train_acc = []
             test_acc = []
             for i in range(trials):
@@ -81,10 +81,10 @@ if two:
 
             print("=========== Training Data ===========")
             print("Average Accuracy: " + str(avg(train_acc)))
-            print()
+            print("")
             print("============= Test Data =============")
             print("Average Accuracy: "+ str(avg(test_acc)))
-            print()
+            print("")
 
 if three:
     print("=====================================")
