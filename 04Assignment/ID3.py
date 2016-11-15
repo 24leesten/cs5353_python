@@ -88,6 +88,7 @@ def get_label(labels):
 def id3(data_set, labels, attributes, treeDepth = -1):
     if(treeDepth > 0):
         treeDepth -= 1
+    print(labels)
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
         t = Tree()
@@ -129,7 +130,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
                 expected_entropy += ent * (length / len(column))
             info_gain[attribute]=(entropy - expected_entropy)
 
-        print(info_gain)
+        #print(info_gain)
         attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
         attributes.remove(attribute)
