@@ -102,7 +102,6 @@ def id3(data_set, labels, attributes, treeDepth = -1):
         # Get the main entropy
         for lbl in unique_lbl:
             probs.append(labels.count(lbl) / float(len(labels)))
-            print(probs[idx])
             entropy += -probs[idx] * math.log(2, probs[idx])
             idx += 1
         # Get the entropy for each attribute
@@ -130,6 +129,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
                 expected_entropy += ent * (length / len(column))
             info_gain[attribute]=(entropy - expected_entropy)
 
+        print(info_gain)
         attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
         attributes.remove(attribute)
