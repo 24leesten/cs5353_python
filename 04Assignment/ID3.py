@@ -70,6 +70,11 @@ def scan(labels_file, Attributes_file, numeric=None):
     return {'d': data_set, 'l': labels, 'a': attributes}
 
 
+
+def log2(x):
+    return math.log(x) / math.log(2)
+
+
 def get_column(data_set, col):
     column = []
     for row in data_set:
