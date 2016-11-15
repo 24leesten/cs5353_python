@@ -1,8 +1,12 @@
+'''
+Created on Sep 23, 2016
+
+@author: Leland Stenquist
+'''
 import csv
 import ast
 import numpy
 import math
-import operator
 
 class Tree(object):
     def __init__(self):
@@ -74,11 +78,15 @@ def get_column(data_set, col):
 
 
 def get_label(labels):
-    return max(labels.count(-1), labels.count(1))
-    pass
+    if(labels.count(1) < labels.count(-1)):
+        return -1
+    else:
+        return 1
 
 
-def id3(data_set, labels, attributes):
+def id3(data_set, labels, attributes, treeDepth = -1):
+    if(treeDepth > 0):
+        treeDepth -= 1
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
         t = Tree()
@@ -125,6 +133,8 @@ def id3(data_set, labels, attributes):
         attributes.remove(attribute)
 
         unique_vals = numpy.unique(get_column(data_set, attribute))
+        trees = [Tree() for i in range(len(unique_vals))]
+        tree_inx = 0
         for val in unique_vals:
             count = 0
             new_data_set = []
@@ -134,14 +144,15 @@ def id3(data_set, labels, attributes):
                     new_data_set.append(row)
                     new_labels.append(labels[count])
                 count += 1
-            if len(new_data_set) == 0:
-                leaf = Tree
+            if len(new_data_set) == 0 or treeDepth == 0:
+                leaf = trees[tree_inx]
                 leaf.link = val
                 leaf.leaf = True
                 leaf.label = get_label(labels)
                 t1.children.append(leaf)
+                tree_inx +=1
             else:
-                t = id3(new_data_set, new_labels, attributes)
+                t = id3(new_data_set, new_labels, attributes,treeDepth)
                 t.link = val
                 t1.children.append(t)
         t = t1
@@ -183,6 +194,7 @@ def test_id3(tree, data_set, labels, attributes):
             for child in node.children:
                 if (child.link == val):
                     node = child
+                    break
 
         if labels[count] == node.label:
             correct += 1

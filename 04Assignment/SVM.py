@@ -67,11 +67,10 @@ def dot_product(W, X):
 #    product(int) : dot product of the vectors
 #
 def update_W(W, gamma, y, X):
-    L = matrix_mult_constant(W, 1-gamma)
-    R = matrix_mult_constant(X, gamma*C*y)
-    W = matrix_add(L, R)
-    return W
-
+    W = matrix_mult_constant(W, (1 - gamma))
+    X = matrix_mult_constant(X, (gamma * C * y))
+    R = matrix_add(W, X)
+    return R
 
 #
 # add two matrices
@@ -145,13 +144,12 @@ def svm_alg(X, y, W, b, count, gamma):
     if False:
         debug_svm(X, y, W, b, gamma)
     # SVM
-    if y*(dot_product(W, X)+b) <= 1:
+    if y * (dot_product(W, X) + b) <= 1:
         count = count + 1
-        # TODO: Do we update bias?
-        W_b = {'W':update_W(W, gamma, y, X), 'b':(b + gamma * y), 'count':count}
+        W_b = {'W': update_W(W, gamma, y, X), 'b': (((1-gamma)*b)+(gamma*C*y)), 'count': count}
         return W_b
     else:
-        W_b = {'W':matrix_mult_constant(W, 1-gamma), 'b':(b + gamma * y), 'count':count}
+        W_b = {'W': matrix_mult_constant(W, (1 - gamma)), 'b': ((1-gamma)*b), 'count': count}
         return W_b
 
 
@@ -159,7 +157,7 @@ def svm_alg(X, y, W, b, count, gamma):
 #
 # MAIN
 #
-def run_svm(labels_file, data_file, epochs=1, c=1, gamma=0.01, bias=0):
+def run_svm(labels_file, data_file, epochs=-1, c=1, gamma=0.01, bias=0):
     global C
     C = c
 
@@ -184,30 +182,33 @@ def run_svm(labels_file, data_file, epochs=1, c=1, gamma=0.01, bias=0):
 
         # fill in training_data with CSV data
         for row in data_reader:
-            if row == "":
-                continue
+
             count = 0
             dict_str = '{'
             for val in row:
+                if str(val) == "" or val is None or not str(val).isdigit:
+                    continue
                 dict_str = dict_str + str(count) + ":" + val + ','
                 count += 1
             dict_str = dict_str[:-1] + '}'
             training_data.append(ast.literal_eval(dict_str))
 
     count = 0
-    range_td = list(range(len(y_vals)))
+    range_td = list(range(len(training_data[0])))
+
+    if epochs == -1:
+        epochs = len(y_vals)
     while count < epochs:
         random.shuffle(range_td)
-
-        row_count = 0
         # Loop through all the rows
         for row in range_td:
             W_b = svm_alg(training_data[row], y_vals[row], W_b['W'], W_b['b'], W_b['count'], gamma)
-            gamma = gamma/(1+gamma*(row_count/c))
-            row_count += 1
+
+            gamma = (gamma / (1 + gamma * (count / C)))
         count += 1
 
     W_b['tests'] = len(y_vals) * epochs
     return (W_b)
+
 
 
