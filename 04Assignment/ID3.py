@@ -71,10 +71,6 @@ def scan(labels_file, Attributes_file, numeric=None):
 
 
 
-def log2(x):
-    return math.log(x) / math.log(2)
-
-
 def get_column(data_set, col):
     column = []
     for row in data_set:
@@ -106,7 +102,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
         # Get the main entropy
         for lbl in unique_lbl:
             probs.append(labels.count(lbl) / len(labels))
-            entropy = entropy + (-probs[idx] * log2(probs[idx]))
+            entropy = entropy + (-probs[idx] * math.log(2,probs[idx]))
             idx += 1
         # Get the entropy for each attribute
         for attribute in attributes:  # TODO : could be probelmatic
@@ -129,7 +125,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
                 neg = val_dict[row]['n']
                 length = pos + neg
                 if (pos != 0 and neg != 0):
-                    ent = (-(pos / length) * log2(pos / length)) * (-(neg / length) * log2(neg / length))
+                    ent = (-(pos / length) * math.log(2,(pos / length)) * (-(neg / length) * math.log(2,neg / length)))
                 expected_entropy += ent * (length / len(column))
             info_gain[attribute]=(entropy - expected_entropy)
 
