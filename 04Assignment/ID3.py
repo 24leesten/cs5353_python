@@ -89,7 +89,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
     if(treeDepth > 0):
         treeDepth -= 1
     print(labels)
-    print(data_set)
+    #print(data_set)
     print(attributes)
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
@@ -135,7 +135,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
         #print(info_gain)
         attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
-        attributes.remove(attribute)
+        attributes = attributes.remove(attribute)
 
         unique_vals = numpy.unique(get_column(data_set, attribute))
         trees = [Tree() for i in range(len(unique_vals))]
