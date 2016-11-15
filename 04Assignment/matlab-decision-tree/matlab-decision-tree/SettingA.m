@@ -1,10 +1,7 @@
 clear all
 close all
 clc
-f = fullfile('ML- project 1\datasets\SettingA')
-f1=fullfile('ML- project 1\tinevez-matlab-tree-3d13d15\@tree') %add the matlab tree class to your directory
-addpath(f,f1)
-old=cd('ML- project 1\datasets\SettingA')
+
 
 fileID = fopen('training.txt','r');% train data
 [S,Label,Attributes] = scan( fileID );%The data has to be in this format, This scan function will not work for new data which is not in the same format. Write your own scan function to bring it this format.
