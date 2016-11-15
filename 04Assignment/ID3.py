@@ -102,7 +102,8 @@ def id3(data_set, labels, attributes, treeDepth = -1):
         # Get the main entropy
         for lbl in unique_lbl:
             probs.append(labels.count(lbl) / len(labels))
-            entropy = entropy + (-probs[idx] * math.log(2,probs[idx]))
+            print(probs[idx])
+            entropy += -probs[idx] * math.log(2, probs[idx])
             idx += 1
         # Get the entropy for each attribute
         for attribute in attributes:  # TODO : could be probelmatic
