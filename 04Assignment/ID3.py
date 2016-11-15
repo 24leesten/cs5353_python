@@ -89,6 +89,8 @@ def id3(data_set, labels, attributes, treeDepth = -1):
     if(treeDepth > 0):
         treeDepth -= 1
     print(labels)
+    print(data_set)
+    print(attributes)
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
         t = Tree()
