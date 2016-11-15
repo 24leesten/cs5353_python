@@ -35,6 +35,41 @@ def debug_svm(X, y, W, b, gamma):
     print('gamma: ' + str(gamma))
 
 
+def scan(labels_file, Attributes_file):
+
+    # create the variables that will be used
+    training_data = []
+    y_vals = []
+
+    with open(labels_file) as csvfile:
+        # Read in the CSV
+        labels_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+
+        # fill in y_vals with CSV data
+        for row in labels_reader:
+            if row == "":
+                continue
+            y_vals.append(int(row.pop(0)))
+
+    with open(Attributes_file) as csvfile:
+        # Read in the CSV
+        data_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+
+        # fill in training_data with CSV data
+        for row in data_reader:
+
+            count = 0
+            dict_str = '{'
+            for val in row:
+                if str(val) == "" or val is None or not str(val).isdigit:
+                    continue
+                dict_str = dict_str + str(count) + ":" + val + ','
+                count += 1
+            dict_str = dict_str[:-1] + '}'
+            training_data.append(ast.literal_eval(dict_str))
+
+    return {'d': training_data, 'l': y_vals}
+
 #
 # Get the dot product of the two Dicts that represent Vectors.   
 #
@@ -157,41 +192,13 @@ def svm_alg(X, y, W, b, count, gamma):
 #
 # MAIN
 #
-def run_svm(labels_file, data_file, epochs=-1, c=1, gamma=0.01, bias=0):
+def run_svm(y_vals, training_data, epochs=-1, c=1, gamma=0.01, bias=0):
     global C
     C = c
 
-    # create the variables that will be used
-    training_data = []
-    y_vals = []
     W_b = {'W': {}, 'b': bias, 'count': 0}
 
-    with open(labels_file) as csvfile:
-        # Read in the CSV
-        labels_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
 
-        # fill in y_vals with CSV data
-        for row in labels_reader:
-            if row == "":
-                continue
-            y_vals.append(int(row.pop(0)))
-
-    with open(data_file) as csvfile:
-        # Read in the CSV
-        data_reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-
-        # fill in training_data with CSV data
-        for row in data_reader:
-
-            count = 0
-            dict_str = '{'
-            for val in row:
-                if str(val) == "" or val is None or not str(val).isdigit:
-                    continue
-                dict_str = dict_str + str(count) + ":" + val + ','
-                count += 1
-            dict_str = dict_str[:-1] + '}'
-            training_data.append(ast.literal_eval(dict_str))
 
     count = 0
     range_td = list(range(len(training_data[0])))

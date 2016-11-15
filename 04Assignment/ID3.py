@@ -7,6 +7,7 @@ import csv
 import ast
 import numpy
 import math
+import random
 
 class Tree(object):
     def __init__(self):
@@ -41,7 +42,7 @@ def scan(labels_file, Attributes_file, numeric=None):
                 count = 0
                 dict_str = '{'
                 for val in row:
-                    if val == "":
+                    if str(val) == "" or val is None or not str(val).isdigit:
                         continue
                     if build:
                         attributes.append(count)
@@ -56,7 +57,7 @@ def scan(labels_file, Attributes_file, numeric=None):
                 count = 0
                 dict_str = '{'
                 for val in row:
-                    if val == "":
+                    if str(val) == "" or val is None or not str(val).isdigit:
                         continue
                     if build:
                         attributes.append(count)
@@ -85,17 +86,20 @@ def get_label(labels):
         return 1
 
 
-def id3(data_set, labels, attributes, treeDepth = -1):
+def id3(data_set, labels, attributes, k = -1,  treeDepth = -1):
     if(treeDepth > 0):
         treeDepth -= 1
     #print(labels)
     #print(data_set)
     #print(attributes)
     unique_lbl = numpy.unique(labels)
-    if len(unique_lbl) == 1:
+    if len(unique_lbl) == 1 or len(attributes) == 0:
         t = Tree()
         t.leaf = True
-        t.label = unique_lbl[0]
+        if labels.count(1) > labels.count(-1):
+            t.label = 1
+        else:
+            t.label = -1
     else:
         t1 = Tree()
         entropy = 0
@@ -108,7 +112,11 @@ def id3(data_set, labels, attributes, treeDepth = -1):
             entropy += float(-probs[idx]) * math.log(2, probs[idx])
             idx += 1
         # Get the entropy for each attribute
+        count = 0
+        random.shuffle(attributes)
         for attribute in attributes:  # TODO : could be probelmatic
+            if(k > 0 and count >= k):
+                break;
             # get the unique attribute
             column = get_column(data_set, attribute)
             val_dict = {}
@@ -128,16 +136,19 @@ def id3(data_set, labels, attributes, treeDepth = -1):
                 neg = val_dict[row]['n']
                 length = pos + neg
                 if (pos != 0 and neg != 0):
-                    pos_ent = (-(pos / float(length)) * math.log(2,(pos / float(length)))) 
-                    neg_ent = (-(neg / float(length)) * math.log(2,(neg / float(length))))
-                    ent = pos_ent * neg_ent
+                    pos_ent = (-(pos / float(length)) * math.log((pos / float(length)),2))
+                    neg_ent = (-(neg / float(length)) * math.log((neg / float(length)),2))
+                    ent = pos_ent + neg_ent
                      
                 expected_entropy += ent * (length / float(len(column)))
             info_gain[attribute]=(float(entropy) - float(expected_entropy))
+            count += 1
+
 
         attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
         attributes.remove(attribute)
+
         unique_vals = numpy.unique(get_column(data_set, attribute))
         trees = [Tree() for i in range(len(unique_vals))]
         tree_inx = 0
@@ -146,9 +157,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
             new_data_set = []
             new_labels = []
             for row in data_set:
-                #print row[attribute]
                 if row[attribute] == val:
-                    #print "=="
                     new_data_set.append(row)
                     new_labels.append(labels[count])
                 count += 1
@@ -203,8 +212,14 @@ def test_id3(tree, data_set, labels, attributes):
                 if (child.link == val):
                     node = child
                     break
+            # no child to follow so guess 1
+            break
 
-        if labels[count] == node.label:
+        label = 1
+        if node.leaf:
+            label = node.label
+
+        if labels[count] == label:
             correct += 1
         else:
             wrong += 1

@@ -18,3 +18,28 @@ def ensemble_data(data_set,labels):
         new_labels.append(labels[rand])
 
     return {'d':new_data_set,'l':new_labels}
+
+def get_data(trees, data_set):
+
+    new_data_set = []
+    for row in data_set:
+        data_row = {}
+        tree_count = 0
+        for tree in trees:
+            node = tree
+            while not node.leaf:
+                val = row[node.attribute]
+                for child in node.children:
+                    if (child.link == val):
+                        node = child
+                        break
+                break
+
+            label = 1
+            if node.leaf:
+                label = node.label
+            data_row[tree_count] = label
+            tree_count += 1
+        new_data_set.append(data_row)
+
+    return new_data_set
