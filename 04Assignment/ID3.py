@@ -88,9 +88,9 @@ def get_label(labels):
 def id3(data_set, labels, attributes, treeDepth = -1):
     if(treeDepth > 0):
         treeDepth -= 1
-    print(labels)
+    #print(labels)
     #print(data_set)
-    print(attributes)
+    #print(attributes)
     unique_lbl = numpy.unique(labels)
     if len(unique_lbl) == 1:
         t = Tree()
@@ -105,7 +105,7 @@ def id3(data_set, labels, attributes, treeDepth = -1):
         # Get the main entropy
         for lbl in unique_lbl:
             probs.append(labels.count(lbl) / float(len(labels)))
-            entropy += -probs[idx] * math.log(2, probs[idx])
+            entropy += float(-probs[idx]) * math.log(2, probs[idx])
             idx += 1
         # Get the entropy for each attribute
         for attribute in attributes:  # TODO : could be probelmatic
@@ -128,15 +128,16 @@ def id3(data_set, labels, attributes, treeDepth = -1):
                 neg = val_dict[row]['n']
                 length = pos + neg
                 if (pos != 0 and neg != 0):
-                    ent = (-(pos / length) * math.log(2,(pos / float(length))) * (-(neg / length) * math.log(2,neg / float(length))))
-                expected_entropy += ent * (length / len(column))
-            info_gain[attribute]=(entropy - expected_entropy)
+                    pos_ent = (-(pos / float(length)) * math.log(2,(pos / float(length)))) 
+                    neg_ent = (-(neg / float(length)) * math.log(2,(neg / float(length))))
+                    ent = pos_ent * neg_ent
+                     
+                expected_entropy += ent * (length / float(len(column)))
+            info_gain[attribute]=(float(entropy) - float(expected_entropy))
 
-        #print(info_gain)
         attribute = max(info_gain, key=info_gain.get)
         t1.attribute = attribute
-        attributes = attributes.remove(attribute)
-
+        attributes.remove(attribute)
         unique_vals = numpy.unique(get_column(data_set, attribute))
         trees = [Tree() for i in range(len(unique_vals))]
         tree_inx = 0
@@ -145,7 +146,9 @@ def id3(data_set, labels, attributes, treeDepth = -1):
             new_data_set = []
             new_labels = []
             for row in data_set:
+                #print row[attribute]
                 if row[attribute] == val:
+                    #print "=="
                     new_data_set.append(row)
                     new_labels.append(labels[count])
                 count += 1
