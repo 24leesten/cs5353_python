@@ -1,12 +1,17 @@
 #
 #
 #
+
+import csv
+import ast
+from SVM import dot_product
+
 def evaluate_svm(labels_file, data_file, W, b):
     test_data = []
     y_vals = []
 
-    wrong = 0;
-    right = 0;
+    wrong = 0
+    right = 0
 
     with open(labels_file) as csvfile:
         # Read in the CSV
