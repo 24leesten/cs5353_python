@@ -30,14 +30,18 @@ def get_data(trees, data_set):
             while not node.leaf:
                 val = row[node.attribute]
                 for child in node.children:
-                    if (child.link == val):
+                    if child.link == val:
                         node = child
                         break
-                break
+                if(len(node.children)) > 0:
+                    node = node.children[0]
+                else:
+                    break
 
             label = 1
             if node.leaf:
                 label = node.label
+
             data_row[tree_count] = label
             tree_count += 1
         new_data_set.append(data_row)

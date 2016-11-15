@@ -7,7 +7,7 @@ Created on Sep 23, 2016
 from ID3 import scan, id3
 from ID3_Helper import get_data, ensemble_data
 from SVM import run_svm
-from Evaluate import evaluate_svm,print_eval
+from Evaluate import evaluate_svm,print_eval,eval_prec,print_eval_prec,precision_svm
 
 epochs = 20
 
@@ -24,11 +24,11 @@ hand_train_attr=hand_train['a']
 hand_test = scan("res/handwriting/test.labels","res/handwriting/test.data")
 hand_test_data=hand_test['d']
 hand_test_label=hand_test['l']
-madelon_train = scan("res/madelon/madelon_train.labels", "res/madelon/madelon_train.data",25)
+madelon_train = scan("res/madelon/madelon_train.labels", "res/madelon/madelon_train.data",5)
 madelon_train_data=madelon_train['d']
 madelon_train_label=madelon_train['l']
 madelon_train_attr=madelon_train['a']
-madelon_test = scan("res/madelon/madelon_test.labels", "res/madelon/madelon_test.data",25)
+madelon_test = scan("res/madelon/madelon_test.labels", "res/madelon/madelon_test.data",5)
 madelon_test_data=madelon_test['d']
 madelon_test_label=madelon_test['l']
 
@@ -91,3 +91,24 @@ if two:
     print("")
     print("== b ==")
     print("")
+
+    trees = []
+    for i in range(30):
+        e = ensemble_data(madelon_train_data, madelon_train_label)
+        t = id3(e['d'], e['l'], madelon_train_attr, 11)
+        trees.append(t)
+
+    data_set = get_data(trees, madelon_train_data)
+    W_b = run_svm(madelon_train_label, data_set, epochs)
+    precision = precision_svm(madelon_train_label, madelon_train_data, W_b['W'], W_b['b'])
+    evaluation = evaluate_svm(madelon_train_label, madelon_train_data, W_b['W'], W_b['b'])
+    precision = eval_prec(precision)
+    print("=========== Training Data ===========")
+    print_eval_prec(precision)
+    print_eval(evaluation)
+    precision = precision_svm(madelon_test_label, madelon_test_data, W_b['W'], W_b['b'])
+    evaluation = evaluate_svm(madelon_test_label, madelon_test_data, W_b['W'], W_b['b'])
+    precision = eval_prec(precision)
+    print("============= Test Data =============")
+    print_eval_prec(precision)
+    print_eval(evaluation)

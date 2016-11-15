@@ -93,13 +93,13 @@ def id3(data_set, labels, attributes, k = -1,  treeDepth = -1):
     #print(data_set)
     #print(attributes)
     unique_lbl = numpy.unique(labels)
-    if len(unique_lbl) == 1 or len(attributes) == 0:
+    if len(unique_lbl) == 1 or len(attributes) == 0 or len(labels) == 0:
         t = Tree()
         t.leaf = True
-        if labels.count(1) > labels.count(-1):
-            t.label = 1
-        else:
+        if labels.count(1) < labels.count(-1):
             t.label = -1
+        else:
+            t.label = 1
     else:
         t1 = Tree()
         entropy = 0
