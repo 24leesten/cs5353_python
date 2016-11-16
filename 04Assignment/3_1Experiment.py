@@ -12,7 +12,7 @@ from Evaluate import eval_prec
 from Evaluate import print_eval_prec
 from Helper import avg
 
-trials = 20
+trials = 1
 epochs = 20
 C = [pow(2,-2), pow(2,-1), 2, pow(2,2), pow(2,3)]
 gamma = [0.0001, 0.5, 0.9]

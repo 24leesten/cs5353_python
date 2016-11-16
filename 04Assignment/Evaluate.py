@@ -85,7 +85,7 @@ def eval_prec(prec):
 
 
 def print_eval_prec(p):
-    print('Precision')
+    print('Precision Values')
     print('Precision:\t' + str(p['p']))
     print('Recal:\t' + str(p['r']))
     print('F-Value:\t' + str(p['f']))

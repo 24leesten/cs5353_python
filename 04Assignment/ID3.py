@@ -86,7 +86,7 @@ def get_label(labels):
         return 1
 
 
-def id3(data_set, labels, attributes, k = -1,  treeDepth = -1):
+def id3(data_set, labels, attributes,  treeDepth = -1):
     if(treeDepth > 0):
         treeDepth -= 1
     #print(labels)
@@ -112,11 +112,9 @@ def id3(data_set, labels, attributes, k = -1,  treeDepth = -1):
             entropy += float(-probs[idx]) * math.log(2, probs[idx])
             idx += 1
         # Get the entropy for each attribute
-        count = 0
-        random.shuffle(attributes)
+
         for attribute in attributes:  # TODO : could be probelmatic
-            if(k > 0 and count >= k):
-                break;
+
             # get the unique attribute
             column = get_column(data_set, attribute)
             val_dict = {}
@@ -142,7 +140,7 @@ def id3(data_set, labels, attributes, k = -1,  treeDepth = -1):
                      
                 expected_entropy += ent * (length / float(len(column)))
             info_gain[attribute]=(float(entropy) - float(expected_entropy))
-            count += 1
+
 
 
         attribute = max(info_gain, key=info_gain.get)
