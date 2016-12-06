@@ -32,7 +32,9 @@ accuracy = c["correct"]/(c["correct"] + c["wrong"])
 
 # Print out message
 print("Negative Log Likelihood")
+print("+++++++++++++++++++++++")
 print(log_likelihood)
 print("")
 print("Accuracy")
+print("++++++++")
 print(accuracy)
