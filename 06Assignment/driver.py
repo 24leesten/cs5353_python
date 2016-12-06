@@ -22,7 +22,7 @@ w = gradient_descent_logistic_reg(train_data, train_labels, epochs, sigma)
 
 # parse w
 weights = w['w']
-log_likelihood = w['l']
+log_likelihood = w['o']
 
 c = test_weight(test_data, test_labels, weights)
 

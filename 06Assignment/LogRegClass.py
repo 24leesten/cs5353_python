@@ -28,7 +28,7 @@ def gradient_descent_logistic_reg(training_data, y_vals, epochs=1, sigma=4, bias
         x.insert(0, y_vals[i])
         i += 1
 
-    log_likelihood = []
+    objectives = []
 
     for epoch in range(epochs):
 
@@ -58,10 +58,11 @@ def gradient_descent_logistic_reg(training_data, y_vals, epochs=1, sigma=4, bias
         w = w - (r * gradient)
         weights = w.tolist()
 
+        update = (1/(sigma^2)) * np.dot(w,w)
+        objective = update + likelihood
+        objectives.append(objective)
 
-        log_likelihood.append(likelihood)
-
-    return {'w':weights,'l':log_likelihood}
+    return {'w':weights,'o':objectives}
 
 
 def test_weight(training_data, y_vals, w):
