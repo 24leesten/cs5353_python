@@ -1,0 +1,55 @@
+06 Assignment Experiment
+========================
+
+This experiment runs through the use of logistic regression
+classifier in a subgradient descent algorithm. This is a
+simple implementation in python that actually gives
+excellent results against the data that we have provided
+given sufficient epochs and a good sigma. I was able to get
+100% accuracy.
+
+RunMe.sh
+========================
+
+To run the sh file simply type:
+
+> RunMe.sh
+
+This only runs my test showing you the accuracy 0..1 and
+the Objective array per epoch.
+
+Cross Validation.
+========================
+
+I did run cross validation. It is very
+extensive and the function takes a long time. I chose to
+leave it out of my RunMe.sh file. If you would like to
+run my cross validation file type the following command.
+
+> python 01Experiment.py
+
+I use 6-fold cross validation on the following values for
+epochs and for sigma:
+
+  sigmas = [0.1, 0.25, 0.5, 0.75, 1 , 1.5, 2, 4, 8, 16, 32, 64]
+  epochs = [1, 5, 10, 20, 50]
+
+MISC
+========================
+
+Here are other python files I wrote with a brief
+description of what they do:
+
+Helper.py: contains helper functions for cross validation
+
+LogRegClass.py: contains the logistic regression
+classifier in a subgradient descent algorithm.
+
+Scanner.py: Reads in a file.
+
+driver.py: run by the sh script. This is the driver for
+to test the w provided by the training data against the
+test data.
+
+
+
