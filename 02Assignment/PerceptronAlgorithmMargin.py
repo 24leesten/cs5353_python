@@ -9,6 +9,7 @@ import random
 from PerceptronAlgorithm import dot_product
 from PerceptronAlgorithm import update_W
 from PerceptronAlgorithm import debug_perceptron
+import re
 
 MU = 0
 
@@ -57,15 +58,30 @@ def run_perceptron_margin(file, r, mu, epochs = 1):
         reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         
     
-        
+        n = 0
         # fill in variables with CSV data
         for row in reader:
             y_vals.append(int(row.pop(0)))
             dict_str = '{'
             for val in row:
+                m = re.search('(?<=:)[^\s]*', val)
+                if m is not None:
+                    num = m.group(0)
+                    if not num.replace('.','').isdigit():
+                        val = val.replace(num,'0')
                 dict_str = dict_str + val + ','
             dict_str = dict_str[:-1] + '}'
+            # try:
             training_data.append(ast.literal_eval(dict_str))
+            # except SyntaxError:
+            #     print(n)
+            #     break
+            n += 1
+
+    if(True):
+        print("POSITIVE: " + str(y_vals.count(1)))
+        print("NEGATIVE: " + str(y_vals.count(-1)))
+
     
     count = 0
     range_td = list(range(len(y_vals)))
