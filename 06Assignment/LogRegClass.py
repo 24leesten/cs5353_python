@@ -52,10 +52,10 @@ def gradient_descent_logistic_reg(training_data, y_vals, epochs=1, sigma=4, bias
             var1 = -y * x/(np.exp(y * np.dot(w, x)) + 1)
             var2 = (2 * w) / (sigma ** 2)
 
-            gradient += var1 + var2
+            gradient = var1 + var2
+            w = w - (r * gradient)
             likelihood += -np.log(1+np.exp(-y*np.dot(w,x)))
 
-        w = w - (r * gradient)
         weights = w.tolist()
 
         update = (1/(sigma^2)) * np.dot(w,w)
