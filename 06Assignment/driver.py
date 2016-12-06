@@ -24,10 +24,13 @@ w = gradient_descent_logistic_reg(train_data, train_labels, epochs, sigma)
 weights = w['w']
 log_likelihood = w['o']
 
+# run the test
 c = test_weight(test_data, test_labels, weights)
 
+# get the accuracy
 accuracy = c["correct"]/(c["correct"] + c["wrong"])
 
+# Print out message
 print("Negative Log Likelihood")
 print(log_likelihood)
 print("")
