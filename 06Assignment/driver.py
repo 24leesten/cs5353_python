@@ -27,6 +27,8 @@ log_likelihood = w['l']
 c = test_weight(test_data, test_labels, weights)
 
 accuracy = c["correct"]/(c["correct"] + c["wrong"])
+
+print("Negative Log Likelihood")
 print(log_likelihood)
 print("")
 print("Accuracy")
