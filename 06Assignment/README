@@ -13,7 +13,7 @@ RunMe.sh
 
 To run the sh file simply type:
 
-> RunMe.sh
+> run.sh
 
 This only runs my test showing you the accuracy 0..1 and
 the Objective array per epoch.
