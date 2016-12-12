@@ -12,11 +12,12 @@ def scan(file):
         # Read in the CSV
         reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         max_cols = 0
-        col_min = 1
+
 
         # fill in variables with CSV data
         for row in reader:
             y_vals.append(float(row.pop(0)))
+
             t_dict = {}
             for col in row:
                 if col == "":
@@ -25,7 +26,6 @@ def scan(file):
                 key = int(splitStr[0])
                 val = float(splitStr[1])
                 t_dict[key]=val
-                col_min = min(col_min,val)
                 max_cols = max(max_cols,key,len(row))
             training_dicts.append(t_dict)
 
@@ -33,8 +33,8 @@ def scan(file):
 
             data_row = []
 
-            for i in range(max_cols):
-                inx = i + col_min
+            for i in range(max_cols+1):
+                inx = i
                 if inx in t_dict.keys():
                     data_row.append(t_dict[inx])
                 else:
